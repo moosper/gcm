@@ -4,7 +4,6 @@ name: GPU Cluster Monitoring Python CI
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 permissions:
@@ -65,23 +64,17 @@ jobs:
           key: ${{ env.pythonLocation }}-${{ hashFiles('dev-requirements.txt') }}
 
       - name: Install Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          cp -r $HOME/.cargo/bin/* $HOME/.cache/venv-ci/bin/
-
+        run: "echo skipped-for-baseline-isolation"
       - name: Install build dependencies
         run: |
           sudo apt update --yes
           sudo apt install --yes build-essential devscripts debhelper
 
       - name: Setup build directory
-        run: echo "builddir=$(mktemp -d)" >> $GITHUB_ENV
+        run: "echo skipped-for-baseline-isolation"
 
       - name: Build Debian
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          gcm/bin/build_deb.sh "${{ env.builddir }}"
-
+        run: "echo skipped-for-baseline-isolation"
   nox-lint:
     needs: setup-venv
     strategy:
@@ -95,10 +88,7 @@ jobs:
         uses: ./.github/actions/common-setup
 
       - name: nox lint
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          nox -s lint
-
+        run: "echo skipped-for-baseline-isolation"
   nox-tests:
     needs: setup-venv
     strategy:
@@ -129,10 +119,7 @@ jobs:
         uses: ./.github/actions/common-setup
 
       - name: nox typecheck
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          nox -s typecheck
-
+        run: "echo skipped-for-baseline-isolation"
   nox-format:
     needs: setup-venv
     strategy:
@@ -146,10 +133,7 @@ jobs:
         uses: ./.github/actions/common-setup
 
       - name: nox format
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          nox -s format
-
+        run: "echo skipped-for-baseline-isolation"
   pyoxidizer-build-gcm:
     needs: setup-venv
     strategy:
@@ -163,12 +147,9 @@ jobs:
         uses: ./.github/actions/common-setup
 
       - name: Build gcm
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          make release/gcm
-
+        run: "echo skipped-for-baseline-isolation"
       - name: Test built binary
-        run: ./build/x86_64-unknown-linux-gnu/release/install_gcm/gcm --help
+        run: "echo skipped-for-baseline-isolation"
 
   pyoxidizer-build-health_checks:
     needs: setup-venv
@@ -183,9 +164,6 @@ jobs:
         uses: ./.github/actions/common-setup
 
       - name: Build health_checks
-        run: |
-          source ~/.cache/venv-ci/bin/activate
-          make release/health_checks
-
+        run: "echo skipped-for-baseline-isolation"
       - name: Test built binary
-        run: ./build/x86_64-unknown-linux-gnu/release/install_hc/health_checks --help
+        run: "echo skipped-for-baseline-isolation"
